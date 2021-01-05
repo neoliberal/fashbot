@@ -104,6 +104,7 @@ class FashBot:
 
     def handle_message(self, message):
         """Respond fashily to messages with requested action"""
+        # TODO implement this
         self.logger.debug("Handling message %s", message.id)
         # Should just strip off the "re:"
         _, content_type, content_id, state = message.subject.split()
@@ -115,10 +116,11 @@ class FashBot:
         # This is where more complicated logic will go for state-dependent
         # actions like adding usernotes or banning someone. But for now it can
         # only reply with usernotes
-        body = self.get_usernotes(content.author)
-        with open("dialogue/commands.txt") as f:
-            body += f.read()
-        message.author.message(subject=message.subject, message=str(usernotes))
+
+        #body = self.get_usernotes(content.author)
+        #with open("dialogue/commands.txt") as f:
+        #    body += f.read()
+        #message.author.message(subject=message.subject, message=str(usernotes))
 
 
     def get_usernotes(self, user):
