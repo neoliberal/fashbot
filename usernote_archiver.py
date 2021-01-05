@@ -70,14 +70,16 @@ class UsernoteArchiver:
                     note_exists = False
                     for users_archived_note in archived_usernotes["blob"][user]["ns"]:
                         if note["t"] == users_archived_note["t"]:
+                            # Compare timestamps to tell if it's the same note
                             note_exists = True
+                            break
                     if note_exists:
                         continue
                     self.logger.info("Adding note for user %s", user)
                     archived_usernotes["blob"][user]["ns"].append(note)
             else:
                 self.logger.info("Adding new user %s", user)
-                archived_usernotes["blob"][user] = user
+                archived_usernotes["blob"][user] = subreddit_usernotes["blob"][user]
 
         self.logger.debug("Saving updated usernotes")
         with open("archived_usernotes.json", "w") as f:
