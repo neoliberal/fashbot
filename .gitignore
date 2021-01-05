@@ -1,0 +1,5 @@
+__pycache__
+archived_usernotes.json*
+env/
+variables.env
+dialogue
