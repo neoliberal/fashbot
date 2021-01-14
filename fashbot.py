@@ -44,8 +44,8 @@ class FashBot:
             prawcore.exceptions.ResponseException,
             prawcore.exceptions.RequestException
         )
-        mods = self.subreddit.moderator()
         try:
+            mods = self.subreddit.moderator()
             for comment in self.subreddit.stream.comments(pause_after=1):
                 # It would be easier to use username pings to summon the bot
                 # but those don't show up when removed, even for mods -_-
@@ -69,7 +69,7 @@ class FashBot:
                     # Don't trigger on comment replies or pings
                     if item.created_utc > self.start_time:
                         # Don't trigger on PMs sent prior to startup
-                        if item.author in mods():
+                        if item.author in mods:
                             # Again, no plebs
                             self.handle_message(item)
                 item.mark_read()
