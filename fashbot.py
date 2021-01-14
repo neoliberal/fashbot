@@ -13,7 +13,7 @@ from zlib import decompress
 import praw
 import prawcore
 
-from slack_python_logging import slack_logger
+import slack_python_logging
 
 
 class FashBot:
@@ -28,8 +28,8 @@ class FashBot:
             user_agent = "linux:fashbot:v0.1 (by /u/jenbanim)"
         )
         self.subreddit = self.reddit.subreddit(os.environ["subreddit"])
-        self.logger = slack_logger.initialize(
-            app_name = "fashbot", 
+        self.logger = slack_python_logging.getLogger(
+            app_name = "fashbot",
             stream_loglevel = "DEBUG",
             slack_loglevel = "CRITICAL"
         )
@@ -80,7 +80,7 @@ class FashBot:
 
     def handle_comment(self, comment):
         """Reply fashily to comment summons with command options
-        
+
         By putting the data about the comment type and ID in the subject, we
         know what content is being referred to in subsequent messages
         """
@@ -180,7 +180,17 @@ class FashBot:
 
 if __name__ == "__main__":
     """Main program loop. Create a fashbot instance and listen continuously."""
+
     fashbot = FashBot()
+
+    # Log uncaught exceptions to Slack before exiting
+    def log_excepthook(ex_type, ex_value, ex_traceback):
+        fashbot.logger.critical(
+            "Critical Exception caught, exiting",
+            exc_info=(ex_type, ex_value, ex_traceback)
+        )
+    sys.excepthook = log_excepthook # Wish I could use a lambda :/
+
     while True:
         fashbot.listen()
         time.sleep(3)
